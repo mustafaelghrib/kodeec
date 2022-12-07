@@ -4,3 +4,4 @@ __pycache__/
 .env
 .migrations
 .volumes
+.pytest_cache

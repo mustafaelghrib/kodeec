@@ -1,4 +1,4 @@
-## Crewtech
+## Kodeec
 A full production backend API built with these tech stacks:
 
 - REST API: _Flask and Flask-RESTFul_.
@@ -27,6 +27,10 @@ A full production backend API built with these tech stacks:
 - Run Docker Compose:
   ```shell
   docker compose -f backend/.docker-compose/base.yml up -d --build
+  ```
+- Run Pytest:
+  ```shell
+  docker exec -it kodeec_base_flask /bin/bash -c "/opt/venv/bin/pytest"
   ```
 
 ---
