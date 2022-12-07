@@ -11,4 +11,4 @@ flask db migrate
 flask db upgrade
 
 echo "[entrypoint.sh] Start the server"
-gunicorn -b 0.0.0.0 'manage:app'
+gunicorn -b 0.0.0.0 'app:create_app()'
