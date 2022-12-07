@@ -1,5 +1,7 @@
 import os
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 
 def create_app():
@@ -7,6 +9,12 @@ def create_app():
     app = Flask(__name__)
 
     app.config.from_object(os.environ.get('FLASK_CONFIG'))
+
+    db = SQLAlchemy(app)
+    db.init_app(app)
+
+    migrate = Migrate(app, db)
+    migrate.init_app(app, db)
 
     @app.route('/')
     def home():
