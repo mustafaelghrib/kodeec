@@ -3,28 +3,28 @@ version: '3.9'
 services:
 
   flask:
-    image: kodeec
-    container_name: kodeec_flask
+    image: kodeec_base
+    container_name: kodeec_base_flask
     build:
-      context: .
+      context: ..
       dockerfile: Dockerfile
     restart: always
     env_file:
-      - .env
+      - ../.env/.env.base
     ports:
       - "8000:8000"
     depends_on:
       - postgres
     volumes:
-      - .:/backend
+      - ..:/backend
     command: sh -c "chmod +x ./entrypoint.sh && sh ./entrypoint.sh"
 
   postgres:
     image: postgres:13-alpine
-    container_name: kodeec_postgres
+    container_name: kodeec_base_postgres
     env_file:
-      - .env
+      - ../.env/.env.base
     ports:
       - "5432:5432"
     volumes:
-      - ../.volumes/postgres_data:/var/lib/postgresql/data
+      - ../../.volumes/postgres_data:/var/lib/postgresql/data

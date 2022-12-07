@@ -16,3 +16,17 @@ A full production backend API built with these tech stacks:
 - CI/CD: _GitHub Actions_.
 
 ---
+
+### Backend:
+
+**Set the environment variables:**
+- Copy `backend/.env.sample/` folder and rename it to `backend/.env/`.
+
+**Run the base environment locally:**
+- Update the `backend/.env/.env.base` file.
+- Run Docker Compose:
+  ```shell
+  docker compose -f backend/.docker-compose/base.yml up -d --build
+  ```
+
+---

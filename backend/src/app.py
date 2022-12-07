@@ -21,8 +21,3 @@ def create_app():
         return f"<h1>WELCOME TO FLASK | {os.environ.get('FLASK_CONFIG')}</h1>"
 
     return app
-
-
-if __name__ == "__main__":
-    flask_app = create_app()
-    flask_app.run()
