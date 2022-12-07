@@ -13,7 +13,7 @@ def create_app():
     db = SQLAlchemy(app)
     db.init_app(app)
 
-    migrate = Migrate(app, db)
+    migrate = Migrate(app, db, directory='.migrations')
     migrate.init_app(app, db)
 
     @app.route('/')
