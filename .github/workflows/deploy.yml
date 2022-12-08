@@ -1,0 +1,49 @@
+name: Deploy
+
+on: [ push ]
+
+jobs:
+
+  run_unit_tests:
+    runs-on: ubuntu-latest
+    environment: kodeec-production-environment
+    env:
+      FLASK_CONFIG: config.BaseConfig
+      FLASK_SECRET_KEY: ${{ secrets.FLASK_SECRET_KEY }}
+      POSTGRES_DB: github_actions
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: 5432
+
+    services:
+      postgres:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_DB: github_actions
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_HOST: 127.0.0.1
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Install Packages
+        working-directory: backend
+        run: |
+          python3 -m venv venv;
+          . venv/bin/activate;
+          python -m pip install --upgrade pip;
+          pip install poetry;
+          poetry config virtualenvs.create false --local;
+          poetry install;
+
+      - name: Run Pytest
+        working-directory: backend
+        run: venv/bin/pytest
