@@ -13,3 +13,4 @@ __pycache__/
 *.tfstate
 *.backup
 .secrets.auto.tfvars
+.ssh

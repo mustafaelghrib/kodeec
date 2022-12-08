@@ -41,6 +41,20 @@ module "azure" {
   network_security_group_name = "${local.project_name}-security-group"
   network_interface_name      = "${local.project_name}-network-interface"
 
+  machine_name                    = "${local.project_name}-machine"
+  machine_username                = "${local.project_name}_user"
+  machine_size                    = "Standard_DS1_v2"
+  machine_os_caching              = "ReadWrite"
+  machine_os_storage_account_type = "Standard_LRS"
+  machine_image_publisher         = "Canonical"
+  machine_image_offer             = "0001-com-ubuntu-server-focal"
+  machine_image_sku               = "20_04-lts-gen2"
+  machine_image_version           = "latest"
+
+  machine_ssh_public_key  = file("${path.module}/.ssh/id_rsa.pub")
+  machine_ssh_private_key = file("${path.module}/.ssh/id_rsa")
+  machine_scripts         = ["./scripts/install_docker.sh"]
+
 }
 
 output "azure" {
