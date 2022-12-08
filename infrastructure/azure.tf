@@ -35,6 +35,12 @@ module "azure" {
   database_charset   = "UTF8"
   database_collation = "English_United States.1252"
 
+  network_name                = "${local.project_name}-virtual-network"
+  network_subnet_name         = "${local.project_name}-subnet"
+  network_public_ip_name      = "${local.project_name}-public-ip"
+  network_security_group_name = "${local.project_name}-security-group"
+  network_interface_name      = "${local.project_name}-network-interface"
+
 }
 
 output "azure" {
