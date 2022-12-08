@@ -134,7 +134,7 @@ A full production backend API built with these tech stacks:
   export IMG_NAME=serculate;
   export IMG_TAG=latest;
   
-  export SERCULATE_IMAGE=$ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG;
+  export KODEEC_IMAGE=$ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG;
   
   export ENVIRONMENT=production;
   
@@ -149,11 +149,11 @@ A full production backend API built with these tech stacks:
   ```
 - Build a Docker image:
   ```shell
-  docker build -t $SERCULATE_IMAGE -f backend/Dockerfile backend --build-arg ENVIRONMENT=$ENVIRONMENT
+  docker build -t $KODEEC_IMAGE -f backend/Dockerfile backend --build-arg ENVIRONMENT=$ENVIRONMENT
   ```
 - Push the Docker image to Azure Container Registry:
   ```shell
-  docker push $SERCULATE_IMAGE
+  docker push $KODEEC_IMAGE
   ```
 
 
@@ -169,7 +169,7 @@ A full production backend API built with these tech stacks:
   ```
 - Run the script on the server:
   ```shell
-  ssh $MACHINE_USER@$MACHINE_IP "python3 run_backend.py --env=.env.$ENVIRONMENT --image=$SERCULATE_IMAGE"
+  ssh $MACHINE_USER@$MACHINE_IP "python3 run_backend.py --env=.env.$ENVIRONMENT --image=$KODEEC_IMAGE"
   ```
 
 ---
