@@ -107,3 +107,55 @@ A full production backend API built with these tech stacks:
 
 ---
 
+### Deployment:
+
+#### Deploy Manually:
+- Create the Azure resources by following the infrastructure section.
+- Export values and change them according to your infrastructure:
+  ```shell
+  export ACR_URL=<YOUR_ACR_URL>;
+  export ACR_USERNAME=<YOUR_ACR_USERNAME>;
+  export ACR_PASSWORD=<YOUR_ACR_PASSWORD>;
+  
+  export IMG_NAME=serculate;
+  export IMG_TAG=latest;
+  
+  export SERCULATE_IMAGE=$ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG;
+  
+  export ENVIRONMENT=production;
+  
+  export MACHINE_IP=<YOUR_MACHINE_IP>;
+  export MACHINE_USER=<YOUR_MACHINE_USER>;
+  ```
+
+
+- Login to Azure Container Registry:
+  ```shell
+  docker login $ACR_URL -u $ACR_USERNAME -p $ACR_PASSWORD
+  ```
+- Build a Docker image:
+  ```shell
+  docker build -t $SERCULATE_IMAGE -f backend/Dockerfile backend --build-arg ENVIRONMENT=$ENVIRONMENT
+  ```
+- Push the Docker image to Azure Container Registry:
+  ```shell
+  docker push $SERCULATE_IMAGE
+  ```
+
+
+- Copy the env file and the run script to the server:
+  ```shell
+  rsync backend/.env/.env.$ENVIRONMENT scripts/run_backend.py $MACHINE_USER@$MACHINE_IP:/home/$MACHINE_USER
+  ```
+
+
+- Login to Azure Container Registry on the server:
+  ```shell
+  ssh $MACHINE_USER@$MACHINE_IP "docker login $ACR_URL -u $ACR_USERNAME -p $ACR_PASSWORD"
+  ```
+- Run the script on the server:
+  ```shell
+  ssh $MACHINE_USER@$MACHINE_IP "python3 run_backend.py --env=.env.$ENVIRONMENT --image=$SERCULATE_IMAGE"
+  ```
+
+---
