@@ -33,6 +33,17 @@ A full production backend API built with these tech stacks:
   docker exec -it kodeec_base_flask /bin/bash -c "/opt/venv/bin/pytest"
   ```
 
+**Run the production environment locally:**
+- Get the environment variables from the infrastructure:
+  ```shell
+  python scripts/get_infra_output.py --compose=infrastructure/.docker-compose.yml --module=azure
+  ```
+- Update the `backend/.env/.env.production` file.
+- Run Docker Compose:
+  ```shell
+  docker compose -f backend/.docker-compose/production.yml up -d --build
+  ```
+
 ---
 
 ### Infrastructure:

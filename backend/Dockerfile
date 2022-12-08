@@ -1,6 +1,9 @@
-FROM python:3.10-slim AS builder
+FROM --platform=linux/amd64 python:3.10-slim AS builder
+
+ARG ENVIRONMENT
 
 ENV \
+ENVIRONMENT=${ENVIRONMENT} \
 PYTHONDONTWRITEBYTECODE=1 \
 PYTHONUNBUFFERED=1 \
 PYTHONFAULTHANDLER=1 \
@@ -19,12 +22,12 @@ RUN apt-get update && \
     pip install --upgrade pip && \
     pip install "poetry==$POETRY_VERSION" && \
     poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi && \
+    poetry install $(if [ $ENVIRONMENT = 'production' ]; then echo '--only main'; fi) --no-interaction --no-ansi && \
     apt-get -y remove libpq-dev gcc && \
     apt-get -y autoremove && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-FROM python:3.10-slim AS main
+FROM --platform=linux/amd64 python:3.10-slim AS main
 
 COPY --from=builder /opt/venv /opt/venv
 
