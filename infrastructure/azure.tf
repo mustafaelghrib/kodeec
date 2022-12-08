@@ -16,11 +16,24 @@ provider "azurerm" {
   client_secret   = var.azure.client_secret
 }
 
+variable "database_server_password" { type = string }
+
 module "azure" {
   source = "./modules/azure"
 
   resource_group_name     = "${local.project_name}-resource-group"
   resource_group_location = "East US"
+
+  database_server_name     = "${local.project_name}-database-server"
+  database_server_username = "${local.project_name}_db_user"
+  database_server_password = var.database_server_password
+  database_server_sku_name = "B_Gen5_2"
+  database_server_storage  = "5120"
+  database_server_version  = "11"
+
+  database_name      = "${local.project_name}_db"
+  database_charset   = "UTF8"
+  database_collation = "English_United States.1252"
 
 }
 
