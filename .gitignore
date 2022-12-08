@@ -5,3 +5,10 @@ __pycache__/
 .migrations
 .volumes
 .pytest_cache
+
+# infrastructure
+.terraform
+*.lock.hcl
+*.*.hcl
+*.tfstate
+*.backup
