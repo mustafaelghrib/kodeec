@@ -6,3 +6,4 @@
 docker-compose.yml
 Dockerfile
 poetry.lock
+.pytest_cache
