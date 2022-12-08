@@ -42,6 +42,10 @@ A full production backend API built with these tech stacks:
 - Create a file and name it to `.backend.hcl` under `infrastructure` folder.
 - Copy the content of file `.backend.hcl.sample` inside it and fill the values.
 
+**Setup Secrets:**
+- Create a file with the name `.secrets.auto.tfvars` under `infrastructure` folder.
+- Copy the contents of file `.secrets.auto.tfvars.sample` inside it and fill the values.
+
 **Run Terraform Commands:**
 
 - terraform init

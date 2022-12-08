@@ -12,3 +12,4 @@ __pycache__/
 *.*.hcl
 *.tfstate
 *.backup
+.secrets.auto.tfvars
