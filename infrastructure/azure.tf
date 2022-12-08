@@ -55,6 +55,9 @@ module "azure" {
   machine_ssh_private_key = file("${path.module}/.ssh/id_rsa")
   machine_scripts         = ["./scripts/install_docker.sh"]
 
+  container_registry_name = "${local.project_name}registry"
+  container_registry_sku  = "Basic"
+
 }
 
 output "azure" {
