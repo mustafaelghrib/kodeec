@@ -78,6 +78,11 @@ A full production backend API built with these tech stacks:
   ```shell
   docker compose -f infrastructure/.docker-compose.yml run --rm terraform plan -target="module.azure"
   ```
+- terraform plan github
+  ```shell
+  docker compose -f infrastructure/.docker-compose.yml run --rm terraform plan -target="module.github" --auto-approve
+  ```
+
 
 -
 - terraform apply all
@@ -88,6 +93,11 @@ A full production backend API built with these tech stacks:
   ```shell
   docker compose -f infrastructure/.docker-compose.yml run --rm terraform apply -target="module.azure" --auto-approve
   ```
+- terraform apply github
+  ```shell
+  docker compose -f infrastructure/.docker-compose.yml run --rm terraform apply -target="module.github" --auto-approve
+  ```
+
 
 - 
 - terraform destroy all
@@ -97,6 +107,10 @@ A full production backend API built with these tech stacks:
 - terraform destroy azure
   ```shell
   docker compose -f infrastructure/.docker-compose.yml run --rm terraform destroy -target="module.azure" --auto-approve
+  ```
+- terraform destroy github
+  ```shell
+  docker compose -f infrastructure/.docker-compose.yml run --rm terraform destroy -target="module.github" --auto-approve
   ```
 
 - 
