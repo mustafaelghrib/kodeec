@@ -14,6 +14,7 @@ A full production backend API built with these tech stacks:
   - _Azure Container Registry (ACR)._
 - Infrastructure as Code: _Terraform_.
 - CI/CD: _GitHub Actions_.
+- Version Control: _Git and GitHub_.
 
 ---
 
