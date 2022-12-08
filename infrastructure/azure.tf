@@ -15,3 +15,16 @@ provider "azurerm" {
   client_id       = var.azure.client_id
   client_secret   = var.azure.client_secret
 }
+
+module "azure" {
+  source = "./modules/azure"
+
+  resource_group_name     = "${local.project_name}-resource-group"
+  resource_group_location = "East US"
+
+}
+
+output "azure" {
+  value     = module.azure
+  sensitive = true
+}
