@@ -4,79 +4,79 @@ on: [ push ]
 
 jobs:
 
-  run_unit_tests:
-    runs-on: ubuntu-latest
-    environment: kodeec-production-environment
-    env:
-      FLASK_CONFIG: config.BaseConfig
-      FLASK_SECRET_KEY: ${{ secrets.FLASK_SECRET_KEY }}
-      POSTGRES_DB: github_actions
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_HOST: 127.0.0.1
-      POSTGRES_PORT: 5432
-
-    services:
-      postgres:
-        image: postgres:13-alpine
-        env:
-          POSTGRES_DB: github_actions
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_HOST: 127.0.0.1
-          POSTGRES_PORT: 5432
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
-    steps:
-
-      - name: Check out repository code
-        uses: actions/checkout@v3
-
-      - name: Install Packages
-        working-directory: backend
-        run: |
-          python3 -m venv venv;
-          . venv/bin/activate;
-          python -m pip install --upgrade pip;
-          pip install poetry;
-          poetry config virtualenvs.create false --local;
-          poetry install;
-
-      - name: Run Pytest
-        working-directory: backend
-        run: venv/bin/pytest
-
-  build_and_push_docker_image:
-    runs-on: ubuntu-latest
-    needs: [run_unit_tests]
-    environment: kodeec-production-environment
-    env:
-      ACR_URL: ${{ secrets.ACR_URL }}
-      ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
-      ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
-      IMG_NAME: ${{ secrets.IMG_NAME }}
-      IMG_TAG: ${{ secrets.IMG_TAG }}
-
-    steps:
-
-      - name: Check out repository code
-        uses: actions/checkout@v3
-
-      - name: Build a Docker image
-        working-directory: backend
-        run: |
-          docker login $ACR_URL -u $ACR_USERNAME -p $ACR_PASSWORD;
-          docker build -t $ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG -f Dockerfile . --build-arg ENVIRONMENT=production;
-
-      - name: Push to Azure Container Registry
-        working-directory: backend
-        run: docker push $ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG;
+#  run_unit_tests:
+#    runs-on: ubuntu-latest
+#    environment: kodeec-production-environment
+#    env:
+#      FLASK_CONFIG: config.BaseConfig
+#      FLASK_SECRET_KEY: ${{ secrets.FLASK_SECRET_KEY }}
+#      POSTGRES_DB: github_actions
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: postgres
+#      POSTGRES_HOST: 127.0.0.1
+#      POSTGRES_PORT: 5432
+#
+#    services:
+#      postgres:
+#        image: postgres:13-alpine
+#        env:
+#          POSTGRES_DB: github_actions
+#          POSTGRES_USER: postgres
+#          POSTGRES_PASSWORD: postgres
+#          POSTGRES_HOST: 127.0.0.1
+#          POSTGRES_PORT: 5432
+#        ports:
+#          - 5432:5432
+#        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+#
+#    steps:
+#
+#      - name: Check out repository code
+#        uses: actions/checkout@v3
+#
+#      - name: Install Packages
+#        working-directory: backend
+#        run: |
+#          python3 -m venv venv;
+#          . venv/bin/activate;
+#          python -m pip install --upgrade pip;
+#          pip install poetry;
+#          poetry config virtualenvs.create false --local;
+#          poetry install;
+#
+#      - name: Run Pytest
+#        working-directory: backend
+#        run: venv/bin/pytest
+#
+#  build_and_push_docker_image:
+#    runs-on: ubuntu-latest
+#    needs: [ run_unit_tests ]
+#    environment: kodeec-production-environment
+#    env:
+#      ACR_URL: ${{ secrets.ACR_URL }}
+#      ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+#      ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+#      IMG_NAME: ${{ secrets.IMG_NAME }}
+#      IMG_TAG: ${{ secrets.IMG_TAG }}
+#
+#    steps:
+#
+#      - name: Check out repository code
+#        uses: actions/checkout@v3
+#
+#      - name: Build a Docker image
+#        working-directory: backend
+#        run: |
+#          docker login $ACR_URL -u $ACR_USERNAME -p $ACR_PASSWORD;
+#          docker build -t $ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG -f Dockerfile . --build-arg ENVIRONMENT=production;
+#
+#      - name: Push to Azure Container Registry
+#        working-directory: backend
+#        run: docker push $ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG;
 
   deploy_to_azure_virtual_machine:
     runs-on: ubuntu-latest
-    needs: [build_and_push_docker_image]
+#    needs: [build_and_push_docker_image]
     environment: kodeec-production-environment
     env:
       ACR_URL: ${{ secrets.ACR_URL }}
@@ -96,10 +96,10 @@ jobs:
       - name: Run the script on the server
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: $MACHINE_IP
-          username: $MACHINE_USER
-          key: $SSH_PRIVATE_KEY
+          host: ${{ secrets.MACHINE_IP }}
+          username: ${{ secrets.MACHINE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            export FINAL_IMAGE=$ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG;
-            docker login $ACR_URL -u $ACR_USERNAME -p $ACR_PASSWORD;
+            export FINAL_IMAGE=${{ secrets.ACR_USERNAME }}.azurecr.io/${{ secrets.IMG_NAME }}:${{ secrets.IMG_TAG }};
+            docker login ${{ secrets.ACR_URL }} -u ${{ secrets.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }};
             python3 run_backend.py --env=.env.production --image=$FINAL_IMAGE;
