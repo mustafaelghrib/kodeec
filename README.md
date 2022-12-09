@@ -18,7 +18,16 @@ A full production backend API built with these tech stacks:
 
 ---
 
-### Backend:
+### Table of Contents
+- [Run The Backend](#backend)
+- [Setup The Infrastructure](#infrastructure)
+- [Deployment](#deployment)
+  - [Deploy Manually](#deploy-manually)
+  - [Deploy using GitHub Actions](#deploy-using-gitHub-actions)
+
+---
+
+### Backend
 
 **Set the environment variables:**
 - Copy `backend/.env.sample/` folder and rename it to `backend/.env/`.
@@ -47,7 +56,7 @@ A full production backend API built with these tech stacks:
 
 ---
 
-### Infrastructure:
+### Infrastructure
 
 **Setup Terraform Backend:**
 - Create a storage on Azure Blob Storage.
@@ -145,9 +154,9 @@ A full production backend API built with these tech stacks:
 
 ---
 
-### Deployment:
+### Deployment
 
-#### Deploy Manually:
+#### Deploy Manually
 - Create the Azure resources by following the infrastructure section.
 - Export values and change them according to your infrastructure:
   ```shell
@@ -196,7 +205,7 @@ A full production backend API built with these tech stacks:
   ssh $MACHINE_USER@$MACHINE_IP "python3 run_backend.py --env=.env.$ENVIRONMENT --image=$FINAL_IMAGE"
   ```
 
-#### Delploy using GitHub Actions:
+#### Deploy using GitHub Actions
 - Get the environment variables from the infrastructure:
   ```shell
   python scripts/get_infra_output.py --c=infrastructure/.docker-compose.yml --m=azure --f=github
