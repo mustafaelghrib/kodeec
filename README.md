@@ -51,6 +51,29 @@ A full production backend API built with these tech stacks:
 
 **Setup Terraform Backend:**
 - Create a storage on Azure Blob Storage.
+  ```shell
+
+  export resource_group=terraform-resource-group;
+  export location=eastus;
+  export storage_account=myterraformbackend;
+  export container=terraform-backend;
+
+  az group create --name $resource_group --location $location;
+  
+  az storage account create \
+  --name $storage_account \
+  --resource-group $resource_group \
+  --location $location \
+  --sku Standard_RAGRS \
+  --kind StorageV2;
+  
+  az storage container create \
+    --account-name $storage_account \
+    --name $container \
+    --auth-mode login;
+  
+  ```
+- Authenticating to Azure Provider [by following this link](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret).
 - Create a file and name it to `.backend.hcl` under `infrastructure` folder.
 - Copy the content of file `.backend.hcl.sample` inside it and fill the values.
 
