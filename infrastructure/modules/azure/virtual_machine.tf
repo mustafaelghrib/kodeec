@@ -52,10 +52,15 @@ resource "azurerm_linux_virtual_machine" "main" {
 
 }
 
-output "MACHINE_PUBLIC_IP" {
-  value = azurerm_linux_virtual_machine.main.public_ip_address
-}
-
 output "MACHINE_SSH_CONNECT" {
   value = "ssh ${var.machine_username}@${azurerm_linux_virtual_machine.main.public_ip_address}"
 }
+
+output "MACHINE_USER" {
+  value = var.machine_username
+}
+
+output "MACHINE_IP" {
+  value = azurerm_linux_virtual_machine.main.public_ip_address
+}
+
