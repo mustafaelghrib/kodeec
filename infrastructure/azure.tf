@@ -24,6 +24,13 @@ module "azure" {
   resource_group_name     = "${local.project_name}-resource-group"
   resource_group_location = "East US"
 
+  storage_account_name             = local.project_name
+  storage_account_tier             = "Standard"
+  storage_account_replication_type = "LRS"
+
+  storage_container_name        = "${local.project_name}-storage-container"
+  storage_container_access_type = "container"
+
   database_server_name     = "${local.project_name}-database-server"
   database_server_username = "${local.project_name}_db_user"
   database_server_password = var.database_server_password
