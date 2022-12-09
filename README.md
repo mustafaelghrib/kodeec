@@ -155,10 +155,10 @@ A full production backend API built with these tech stacks:
   export ACR_USERNAME=<YOUR_ACR_USERNAME>;
   export ACR_PASSWORD=<YOUR_ACR_PASSWORD>;
   
-  export IMG_NAME=serculate;
-  export IMG_TAG=latest;
+  export IMG_NAME=<your_image_name>;
+  export IMG_TAG=<your_image_tag>;
   
-  export KODEEC_IMAGE=$ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG;
+  export FINAL_IMAGE=$ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG;
   
   export ENVIRONMENT=production;
   
@@ -173,11 +173,11 @@ A full production backend API built with these tech stacks:
   ```
 - Build a Docker image:
   ```shell
-  docker build -t $KODEEC_IMAGE -f backend/Dockerfile backend --build-arg ENVIRONMENT=$ENVIRONMENT
+  docker build -t $FINAL_IMAGE -f backend/Dockerfile backend --build-arg ENVIRONMENT=$ENVIRONMENT
   ```
 - Push the Docker image to Azure Container Registry:
   ```shell
-  docker push $KODEEC_IMAGE
+  docker push $FINAL_IMAGE
   ```
 
 
@@ -193,7 +193,7 @@ A full production backend API built with these tech stacks:
   ```
 - Run the script on the server:
   ```shell
-  ssh $MACHINE_USER@$MACHINE_IP "python3 run_backend.py --env=.env.$ENVIRONMENT --image=$KODEEC_IMAGE"
+  ssh $MACHINE_USER@$MACHINE_IP "python3 run_backend.py --env=.env.$ENVIRONMENT --image=$FINAL_IMAGE"
   ```
 
 ---
