@@ -19,7 +19,7 @@ variable "environments" {
 module "github" {
   for_each            = var.environments
   source              = "./modules/github"
-  repository_name     = "mstva/serculate"
+  repository_name     = "mstva/kodeec"
   environment_name    = "${local.project_name}-${each.key}-environment"
   environment_secrets = each.value
 }
