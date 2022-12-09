@@ -67,10 +67,9 @@ jobs:
       - name: Build a Docker image
         working-directory: backend
         run: |
-          export FINAL_IMAGE=$ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG;
           docker login $ACR_URL -u $ACR_USERNAME -p $ACR_PASSWORD;
-          docker build -t $FINAL_IMAGE -f Dockerfile . --build-arg ENVIRONMENT=production;
+          docker build -t $ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG -f Dockerfile . --build-arg ENVIRONMENT=production;
 
       - name: Push to Azure Container Registry
         working-directory: backend
-        run: docker push $FINAL_IMAGE;
+        run: docker push $ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG;
