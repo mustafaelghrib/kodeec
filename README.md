@@ -37,7 +37,7 @@ A full production backend API built with these tech stacks:
 **Run the production environment locally:**
 - Get the environment variables from the infrastructure:
   ```shell
-  python scripts/get_infra_output.py --compose=infrastructure/.docker-compose.yml --module=azure
+  python scripts/get_infra_output.py --c=infrastructure/.docker-compose.yml --m=azure --f=env
   ```
 - Update the `backend/.env/.env.production` file.
 - Run Docker Compose:
@@ -196,4 +196,12 @@ A full production backend API built with these tech stacks:
   ssh $MACHINE_USER@$MACHINE_IP "python3 run_backend.py --env=.env.$ENVIRONMENT --image=$FINAL_IMAGE"
   ```
 
+#### Delploy using GitHub Actions:
+- Get the environment variables from the infrastructure:
+  ```shell
+  python scripts/get_infra_output.py --c=infrastructure/.docker-compose.yml --m=azure --f=github
+  ```
+- Update `infrastructure/.secrets.auto.tfvars` file with the new values.
+- Apply the `github` module in the infrastructure.
+- Update the GitHub Actions file at `.github/workflows/deploy.yml`.
 ---
