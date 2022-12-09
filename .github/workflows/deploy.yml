@@ -73,3 +73,28 @@ jobs:
       - name: Push to Azure Container Registry
         working-directory: backend
         run: docker push $ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG;
+
+  deploy_to_azure_virtual_machine:
+    runs-on: ubuntu-latest
+    needs: [build_and_push_docker_image]
+    environment: kodeec-production-environment
+    env:
+      ACR_URL: ${{ secrets.ACR_URL }}
+      ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+      ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+      IMG_NAME: ${{ secrets.IMG_NAME }}
+      IMG_TAG: ${{ secrets.IMG_TAG }}
+      MACHINE_USER: ${{ secrets.MACHINE_USER }}
+      MACHINE_IP: ${{ secrets.MACHINE_IP }}
+
+    steps:
+
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Run the script on the server
+        working-directory: backend
+        run: |
+          export FINAL_IMAGE=$ACR_USERNAME.azurecr.io/$IMG_NAME:$IMG_TAG;
+          ssh $MACHINE_USER@$MACHINE_IP "docker login $ACR_URL -u $ACR_USERNAME -p $ACR_PASSWORD";
+          ssh $MACHINE_USER@$MACHINE_IP "python3 run_backend.py --env=.env.production --image=$FINAL_IMAGE";
