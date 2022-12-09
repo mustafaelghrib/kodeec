@@ -93,6 +93,34 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
 
+      - name: Create the env file
+        run: |
+          touch .env.production;
+
+          echo FLASK_CONFIG=${{ secrets.FLASK_CONFIG }} >> .env.production;
+          echo FLASK_DEBUG=${{ secrets.FLASK_DEBUG }} >> .env.production;
+          echo FLASK_ENV=${{ secrets.FLASK_ENV }} >> .env.production;
+          echo FLASK_TESTING=${{ secrets.FLASK_TESTING }} >> .env.production;
+          echo FLASK_SECRET_KEY=${{ secrets.FLASK_SECRET_KEY }} >> .env.production;
+
+          echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env.production;
+          echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env.production;
+          echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env.production;
+          echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env.production;
+          echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env.production;
+          
+          source .env.production;
+
+      - name: Copy the env file and the run script to the server
+        uses: burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avzr --delete
+          path: .env.production scripts/run_backend.py
+          remote_path: /home/${{ secrets.MACHINE_USER }}
+          remote_host: ${{ secrets.MACHINE_IP }}
+          remote_user: ${{ secrets.MACHINE_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Run the script on the server
         uses: appleboy/ssh-action@v0.1.6
         with:
